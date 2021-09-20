@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chatroom #1</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
+  <!--<script type='text/javascript' src='http://0.0.0.0:8080/scaledrone.js'></script>-->
+</head>
+
+<body style="padding-top:50px; padding-bottom: 70px;">
+<center><h1><b>Chat</b></h1></center>
+<br>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="list-group" style="padding-bottom:15px;">
+          <div class="card">
+            <div class="card-body">
+              <a id="shmenulinks" class="nav-link" style="border-radius: 0.25rem; cursor: pointer; width: 100%;" data-toggle="collapse" aria-expanded="true" aria-controls="menulinks" data-target="#menulinks"><i class="fa fa-bars" aria-hidden="true"></i> Open/Close menu</a>
+              <div id="menulinks" class="nav nav-pills collapse">
+                <p><b>Chatrooms:</b></p>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/"  class="nav-link "><i class="fa fa-home" aria-hidden="true"></i> Chatroom #1</a>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/"  class="nav-link "><i class="fa fa-home" aria-hidden="true"></i> Chatroom #2</a><br>
+                <p><b>Settings:</b></p>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/"  class="nav-link "><i class="fa fa-cog" aria-hidden="true"></i> Clear Chat</a>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/"  class="nav-link "><i class="fa fa-cog" aria-hidden="true"></i> Change hastag</a><br>
+                <p><b>Other:</b></p>
+                  <div class="members-count">Conecting to server...</div>
+                  <div class="members-list">Loading Users...</div>
+                <a style="width: 100%;" href="https://preview11.github.io/Chat/"  class="nav-link active"><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="conteudo" class="col-lg-9">
+        <div class="card">
+          <div class="card-body">
+            
+  <div class="messages"></div>
+  <form class="message-form" onsubmit="return false;">
+    <input class="message-form__input" placeholder="Type a message..." type="text"/>
+    <input class="message-form__button" value="Send Message" type="submit"/>
+  </form>
+  <script src="./script.js"></script>
+            <br>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<br>
+</body>
+
+
+<style>
+.card {
+  box-shadow: 10px 10px 15px 0px rgb(0 0 0 / 21%);
+}
+
+body {
+  background-color: #e2e2e2 !important;
+}
+
+@media screen and (min-width: 992px) {
+  
+   #menulinks {
+      display: block;
+   }
+   #shmenulinks {
+      display: none;
+   }
+
+}
+
+@media screen and (max-width: 991px) {
+  
+   #shmenulinks {
+      display: block;
+   }
+  
+}
+
+a:active, a:hover {
+color: #043959;
+    box-shadow: 0 0 0 1px #4f94d4, 0 0 2px 1px rgb(79 148 212 / 80%);
+    outline: 1px solid transparent;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      max-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .members-count,
+    .members-list,
+    .messages {
+      border: 1px solid #e4e4e4;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .messages {
+      flex-shrink: 1;
+      overflow: auto;
+    }
+
+    .message {
+      padding: 5px 0;
+    }
+    .message .member {
+      display: inline-block;
+    }
+
+    .member {
+      padding-right: 10px;
+      position: relative;
+    }
+
+    .message-form {
+      display: flex;
+      flex-shrink: 0;
+    }
+    .message-form__input {
+      flex-grow: 1;
+      border: 1px solid #dfdfdf;
+      padding: 10px 15px;
+      font-size: 16px;
+    }
+    .message-form__button {
+      margin: 10px;
+    }
+</style>
+
+
+
+<script>
+// PS! Replace this with your own channel ID
+// If you use this channel ID your app will stop working in the future
+const CLIENT_ID = '4kdFUJIECzApHxlB';
+
+const drone = new ScaleDrone(CLIENT_ID, {
+  data: { // Will be sent out as clientData via events
+    name: getRandomName(),
+    color: getRandomColor(),
+  },
+});
+
+let members = [];
+
+drone.on('open', error => {
+  if (error) {
+    return console.error(error);
+  }
+  console.log('Successfully connected to Scaledrone');
+
+  const room = drone.subscribe('observable-room');
+  room.on('open', error => {
+    if (error) {
+      return console.error(error);
+    }
+    console.log('Successfully joined room');
+  });
+
+  room.on('members', m => {
+    members = m;
+    updateMembersDOM();
+  });
+
+  room.on('member_join', member => {
+    members.push(member);
+    updateMembersDOM();
+  });
+
+  room.on('member_leave', ({id}) => {
+    const index = members.findIndex(member => member.id === id);
+    members.splice(index, 1);
+    updateMembersDOM();
+  });
+
+  room.on('data', (text, member) => {
+    if (member) {
+      addMessageToListDOM(text, member);
+    } else {
+      // Message is from server
+    }
+  });
+});
+
+drone.on('close', event => {
+  console.log('Connection was closed', event);
+});
+
+drone.on('error', error => {
+  console.error(error);
+});
+
+function getRandomName() {
+  return "Sexgod#69420"
+}
+
+function getRandomColor() {
+  return "#" + Math.floor(Math.random() * 0xffffff).toString(16);
+}
+
+
+//------------- DOM STUFF
+
+const DOM = {
+  membersCount: document.querySelector('.members-count'),
+  membersList: document.querySelector('.members-list'),
+  messages: document.querySelector('.messages'),
+  input: document.querySelector('.message-form__input'),
+  form: document.querySelector('.message-form'),
+};
+
+DOM.form.addEventListener('submit', sendMessage);
+
+function sendMessage() {
+  const value = DOM.input.value;
+  if (value === '') {
+    return;
+  }
+  DOM.input.value = '';
+  drone.publish({
+    room: 'observable-room',
+    message: value,
+  });
+}
+
+function createMemberElement(member) {
+  const { name, color } = member.clientData;
+  const el = document.createElement('div');
+  el.appendChild(document.createTextNode(name));
+  el.className = 'member';
+  el.style.color = color;
+  return el;
+}
+
+function updateMembersDOM() {
+  DOM.membersCount.innerText = `${members.length} Users online:`;
+  DOM.membersList.innerHTML = '';
+  members.forEach(member =>
+    DOM.membersList.appendChild(createMemberElement(member))
+  );
+}
+
+function createMessageElement(text, member) {
+  const el = document.createElement('div');
+  el.appendChild(createMemberElement(member));
+  el.appendChild(document.createTextNode(text));
+  el.className = 'message';
+  return el;
+}
+
+function addMessageToListDOM(text, member) {
+  const el = DOM.messages;
+  const wasTop = el.scrollTop === el.scrollHeight - el.clientHeight;
+  el.appendChild(createMessageElement(text, member));
+  if (wasTop) {
+    el.scrollTop = el.scrollHeight - el.clientHeight;
+  }
+}
+
+</script>
+
+
+</html>
